@@ -1,4 +1,4 @@
-FROM ubuntu:latest as build
+FROM ubuntu:latest AS build
 
 # Set the working directory
 WORKDIR /wisecowapp
