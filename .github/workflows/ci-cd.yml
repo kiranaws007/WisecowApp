@@ -59,7 +59,7 @@ jobs:
 
       - name: Authenticate to GKE
         run: |
-          gcloud container clusters get-credentials wisecow-cluster --zone us-central1-c --project wisecow-gke 
+          gcloud container clusters get-credentials wise-cluster-1 --zone us-central1-c --project wisecow-gke 
 
       - name: Deploy to Kubernetes
         run: |
