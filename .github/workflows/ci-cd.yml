@@ -1,0 +1,58 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Cache Docker layers
+      uses: actions/cache@v2
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        file: Dockerfile
+        push: true
+        tags: kirankumars/wisecow:latest
+
+  deploy:
+    name: Deploy to Kubernetes
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up kubectl
+      uses: azure/setup-kubectl@v1
+      with:
+        version: 'v1.24.0'  # Specify the Kubernetes version
+
+    - name: Configure Kubernetes credentials
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        credentials: ${{ secrets.GCP_SA_KEY }}
+    
+    - name: Apply Kubernetes manifests
+      run: |
+        kubectl apply -f wisecow-deployment.yaml
+        kubectl apply -f wisecow-service.yaml
