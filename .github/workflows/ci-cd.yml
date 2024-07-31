@@ -59,7 +59,8 @@ jobs:
 
       - name: Authenticate to GKE
         run: |
-          gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${ZONE} --project ${{ secrets.GCP_PROJECT_ID  }}
+          gcloud container clusters get-credentials wisecow-cluster --zone us-central1-c --project wisecow-gke 
+
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f deployment.yaml
