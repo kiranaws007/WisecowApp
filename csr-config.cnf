@@ -1,0 +1,24 @@
+[ req ]
+default_bits       = 2048
+distinguished_name = req_distinguished_name
+req_extensions     = req_ext
+
+[ req_distinguished_name ]
+countryName            = Country Name (2 letter code)
+countryName_default    = IN
+stateOrProvinceName    = State or Province Name (full name)
+stateOrProvinceName_default = AP
+localityName           = Locality Name (eg, city)
+localityName_default   = Kurnool
+organizationalUnitName = Organizational Unit Name (eg, section)
+organizationalUnitName_default = wisecow
+commonName             = Common Name (e.g. server FQDN or YOUR name)
+commonName_default     = wisecowapp.com
+commonName_max         = 64
+
+[ req_ext ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1 = wisecowapp.com
+DNS.2 = www.wisecowapp.com
